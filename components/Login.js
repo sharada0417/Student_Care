@@ -1,12 +1,11 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, ScrollView, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { PaperProvider, Text, TextInput, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { students } from "../data/StudentsDb";
 
 export default function Login() {
-  const [data, setdata] = useState({
+  const [data, setData] = useState({
     username: "",
     password: "",
   });
@@ -14,12 +13,18 @@ export default function Login() {
   const [error, setError] = useState("");
 
   const navigation = useNavigation();
-  
+
   const handleLogin = () => {
     if (!data.username || !data.password) {
       setError("Please fill all fields");
       return;
     }
+
+    // Mock data to test login without StudentsDb.js
+    const students = [
+      { username: "Alice.j", password: "s123" },
+      { username: "bob.smith", password: "securePass456" },
+    ];
 
     const student = students.find((s) => s.username === data.username);
 
@@ -28,11 +33,12 @@ export default function Login() {
       return;
     }
 
+    setError(""); // Clear any previous error
     navigation.navigate("home", { student });
   };
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.view}
     >
@@ -47,33 +53,33 @@ export default function Login() {
                 <Text style={styles.bodytext}>STUDENT LOGIN</Text>
               </View>
               <View style={styles.form}>
-                <TextInput 
-                  label="Username" 
+                <TextInput
+                  label="Username"
                   mode="outlined"
-                  placeholder='Enter your username'
+                  placeholder="Enter your username"
                   style={styles.input}
                   value={data.username}
-                  onChangeText={(text) => setdata({...data, username: text})}
+                  onChangeText={(text) => setData({ ...data, username: text })}
                 />
                 <TextInput
                   label="Password"
-                  mode='outlined'
-                  placeholder='Enter your password'
+                  mode="outlined"
+                  placeholder="Enter your password"
                   style={styles.input}
                   value={data.password}
-                  onChangeText={(text) => setdata({...data, password: text})}
+                  onChangeText={(text) => setData({ ...data, password: text })}
+                  secureTextEntry={isSecure}
                   right={
                     <TextInput.Icon
-                      icon="eye"
+                      icon={isSecure ? "eye" : "eye-off"}
                       onPress={() => setIsSecure(!isSecure)}
                     />
                   }
-                  secureTextEntry={isSecure}
                 />
-              </View>         
+              </View>
               <View style={styles.btn}>
-                <Button 
-                  mode="contained" 
+                <Button
+                  mode="contained"
                   style={[{ backgroundColor: '#5b1166' }]}
                   onPress={handleLogin}
                 >
@@ -98,6 +104,12 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
+  view: {
+    flex: 1,
+  },
+  scrollView: {
+    flexGrow: 1,
+  },
   container: {
     flexDirection: 'column',
     backgroundColor: '#fff',
@@ -113,9 +125,7 @@ const styles = StyleSheet.create({
   image: {
     width: '80%',
     height: 70,
-  },
-  scrollView: {
-    flexGrow: 1,
+    resizeMode: 'contain',
   },
   footer: {
     flex: 2,
@@ -151,6 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4edf7",
     borderRadius: 5,
     flexDirection: "row",
+    alignItems: "center",
     gap: 6,
   },
   errorText: {

@@ -8,7 +8,7 @@ const Courses = ({ student }) => {
 
     return(
         <View style={styles.view}>
-            <Image source={require("../assets/GalleryGo.PNG")} style={styles.image}/>
+            <Image source={require("../assets/uovlogo.png.PNG")} style={styles.image}/>
             <Card style={{ margin:20 }}>
                 <Card.Content style={styles.cardContent}>
                     <Text style={styles.h1}>{course.name}</Text>
