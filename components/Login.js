@@ -1,49 +1,99 @@
-import React, { useState } from 'react'; // Import useState
+import React, { useState } from 'react'; 
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, ScrollView, Image } from 'react-native';
+import { StyleSheet, View, ScrollView, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { PaperProvider, Text, TextInput, Button } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { students } from "../data/StudentsDb";
 
 export default function Login() {
+  const [data, setdata] = useState({
+    username: "",
+    password: "",
+  });
+  const [isSecure, setIsSecure] = useState(true);
+  const [error, setError] = useState("");
+
   const navigation = useNavigation();
-  const [passwordVisible, setPasswordVisible] = useState(false); // Declare state for password visibility
+  
+  const handleLogin = () => {
+    if (!data.username || !data.password) {
+      setError("Please fill all fields");
+      return;
+    }
+
+    const student = students.find((s) => s.username === data.username);
+
+    if (!student || student.password !== data.password) {
+      setError("Please check your username and password");
+      return;
+    }
+
+    navigation.navigate("home", { student });
+  };
 
   return (
-    <PaperProvider>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        <View style={styles.container}>
-          <View style={styles.imagepad}>
-            <Image source={require('../assets/uovlogo.png')} style={styles.image} />
-          </View>
-          <View style={styles.body}>
-            <Text style={styles.bodytext}>STUDENT LOGIN</Text>
-          </View>
-          <View style={styles.input}>
-            <TextInput label="Username" mode="outlined" keyboardType="default" />
-          </View>
-          <View style={styles.input}>
-            <TextInput
-              label="Password"
-              mode="outlined"
-              secureTextEntry={!passwordVisible} // Toggle visibility based on state
-              right={
-                <TextInput.Icon
-                  icon={passwordVisible ? "eye-off" : "eye"}
-                  onPress={() => setPasswordVisible(!passwordVisible)} // Toggle state
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.view}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <PaperProvider>
+          <ScrollView contentContainerStyle={styles.scrollView}>
+            <View style={styles.container}>
+              <View style={styles.imagepad}>
+                <Image source={require('../assets/uovlogo.png')} style={styles.image} />
+              </View>
+              <View style={styles.body}>
+                <Text style={styles.bodytext}>STUDENT LOGIN</Text>
+              </View>
+              <View style={styles.form}>
+                <TextInput 
+                  label="Username" 
+                  mode="outlined"
+                  placeholder='Enter your username'
+                  style={styles.input}
+                  value={data.username}
+                  onChangeText={(text) => setdata({...data, username: text})}
                 />
-              }
-            />
-          </View>
-          <View style={styles.btn}>
-            <Button mode="contained" style={[{ backgroundColor: '#5b1166' }]}>
-              Login
-            </Button>
-          </View>
-          <View style={styles.footer}>
-            <Text style={styles.footertext}>MyApp © 2024</Text>
-          </View>
-        </View>
-      </ScrollView>
-    </PaperProvider>
+                <TextInput
+                  label="Password"
+                  mode='outlined'
+                  placeholder='Enter your password'
+                  style={styles.input}
+                  value={data.password}
+                  onChangeText={(text) => setdata({...data, password: text})}
+                  right={
+                    <TextInput.Icon
+                      icon="eye"
+                      onPress={() => setIsSecure(!isSecure)}
+                    />
+                  }
+                  secureTextEntry={isSecure}
+                />
+              </View>         
+              <View style={styles.btn}>
+                <Button 
+                  mode="contained" 
+                  style={[{ backgroundColor: '#5b1166' }]}
+                  onPress={handleLogin}
+                >
+                  Login
+                </Button>
+              </View>
+              {error && (
+                <View style={styles.error}>
+                  <Icon name="alert-circle" size={20} color="red" />
+                  <Text style={styles.errorText}>{error}</Text>
+                </View>
+              )}
+              <View style={styles.footer}>
+                <Text style={styles.footertext}>MyApp © 2024</Text>
+              </View>
+            </View>
+          </ScrollView>
+        </PaperProvider>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -87,12 +137,24 @@ const styles = StyleSheet.create({
   bodytext: {
     fontSize: 30,
   },
-  input: {
-    padding: 5,
-    marginVertical: 10,
-  },
   btn: {
     marginBottom: 220,
     marginTop: 10,
+  },
+  input: {
+    width: "100%",
+    marginBottom: 10,
+  },
+  error: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#f4edf7",
+    borderRadius: 5,
+    flexDirection: "row",
+    gap: 6,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 14,
   },
 });
