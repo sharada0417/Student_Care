@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, ScrollView, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { PaperProvider, Text, TextInput, Button } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
+import {
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { Button, Icon, TextInput } from "react-native-paper";
 
-export default function Login() {
+import { students } from "../assets/StudentsDb";
+
+const Login = () => {
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -20,12 +30,6 @@ export default function Login() {
       return;
     }
 
-    // Mock data to test login without StudentsDb.js
-    const students = [
-      { username: "Alice.j", password: "s123" },
-      { username: "bob.smith", password: "securePass456" },
-    ];
-
     const student = students.find((s) => s.username === data.username);
 
     if (!student || student.password !== data.password) {
@@ -33,7 +37,6 @@ export default function Login() {
       return;
     }
 
-    setError(""); // Clear any previous error
     navigation.navigate("home", { student });
   };
 
@@ -43,117 +46,110 @@ export default function Login() {
       style={styles.view}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <PaperProvider>
-          <ScrollView contentContainerStyle={styles.scrollView}>
-            <View style={styles.container}>
-              <View style={styles.imagepad}>
-                <Image source={require('../assets/uovlogo.png')} style={styles.image} />
-              </View>
-              <View style={styles.body}>
-                <Text style={styles.bodytext}>STUDENT LOGIN</Text>
-              </View>
-              <View style={styles.form}>
-                <TextInput
-                  label="Username"
-                  mode="outlined"
-                  placeholder="Enter your username"
-                  style={styles.input}
-                  value={data.username}
-                  onChangeText={(text) => setData({ ...data, username: text })}
-                />
-                <TextInput
-                  label="Password"
-                  mode="outlined"
-                  placeholder="Enter your password"
-                  style={styles.input}
-                  value={data.password}
-                  onChangeText={(text) => setData({ ...data, password: text })}
-                  secureTextEntry={isSecure}
-                  right={
-                    <TextInput.Icon
-                      icon={isSecure ? "eye" : "eye-off"}
-                      onPress={() => setIsSecure(!isSecure)}
-                    />
-                  }
-                />
-              </View>
-              <View style={styles.btn}>
-                <Button
-                  mode="contained"
-                  style={[{ backgroundColor: '#5b1166' }]}
-                  onPress={handleLogin}
-                >
-                  Login
-                </Button>
-              </View>
-              {error && (
-                <View style={styles.error}>
-                  <Icon name="alert-circle" size={20} color="red" />
-                  <Text style={styles.errorText}>{error}</Text>
-                </View>
-              )}
-              <View style={styles.footer}>
-                <Text style={styles.footertext}>MyApp © 2024</Text>
-              </View>
+        <View style={styles.body}>
+          <Image source={require("../assets/logo.png")} style={styles.image} />
+
+          <View style={styles.container}>
+            <Text style={styles.h1}>Student Login</Text>
+
+            <View style={styles.form}>
+              <TextInput
+                mode="outlined"
+                label="Username"
+                placeholder="Enter your username"
+                style={[styles.form.input, styles.inputSpacing]} // Added marginBottom for spacing
+                value={data.username}
+                onChangeText={(text) => setData({ ...data, username: text })}
+              />
+              <TextInput
+                mode="outlined"
+                label="Password"
+                placeholder="Enter your password"
+                style={[styles.form.input, styles.inputSpacing]} // Added marginTop for spacing
+                value={data.password}
+                onChangeText={(text) => setData({ ...data, password: text })}
+                right={
+                  <TextInput.Icon
+                    icon="eye"
+                    onPress={() => setIsSecure(!isSecure)}
+                  />
+                }
+                secureTextEntry={isSecure}
+              />
+
+              <Button
+                mode="contained"
+                style={styles.button}
+                onPress={handleLogin}
+              >
+                Login
+              </Button>
             </View>
-          </ScrollView>
-        </PaperProvider>
+
+            {error && (
+              <View style={styles.error}>
+                <Icon source="alert-circle" size={20} style={styles.icon} />
+                <Text>{error}</Text>
+              </View>
+            )}
+          </View>
+
+          <View style={styles.footer}>
+            <Text style={styles.footer.text}>&copy; 2025 UoV Student Care</Text>
+          </View>
+        </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
-}
+};
+
+export default Login;
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
   },
-  scrollView: {
-    flexGrow: 1,
+  body: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   container: {
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
-  imagepad: {
+    flexGrow: 1,
     padding: 20,
-    alignItems: 'center',
-    flex: 2,
-    marginBottom: 10,
-  },
-  image: {
-    width: '80%',
-    height: 70,
-    resizeMode: 'contain',
+    width: "100%",
   },
   footer: {
-    flex: 2,
-    width: '100%',
-    alignItems: 'center',
-    marginTop: 10,
-    backgroundColor: '#5b1166',
-    padding: 5,
-  },
-  footertext: {
-    color: 'white',
-  },
-  body: {
-    height: 150,
-    width: '100%',
-    padding: 50,
-    marginLeft: 20,
-  },
-  bodytext: {
-    fontSize: 30,
-  },
-  btn: {
-    marginBottom: 220,
-    marginTop: 10,
-  },
-  input: {
+    backgroundColor: "#4b0150",
     width: "100%",
-    marginBottom: 10,
+    color: "#fff",
+    padding: 20,
+    text: {
+      color: "#fff",
+      textAlign: "center",
+    },
+  },
+  form: {
+    marginTop: 20,
+    input: {
+      width: "100%",
+    },
+  },
+  h1: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  image: {
+    marginTop: 20,
+    width: "100%",
+    height: 100,
+    resizeMode: "contain",
+  },
+  button: {
+    backgroundColor: "#4b0150",
+    marginTop: 20,
   },
   error: {
     marginTop: 20,
@@ -161,11 +157,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4edf7",
     borderRadius: 5,
     flexDirection: "row",
-    alignItems: "center",
     gap: 6,
   },
-  errorText: {
-    color: "red",
-    fontSize: 14,
+  inputSpacing: {
+    marginBottom: 15, // Adds space below username input
+    marginTop: 15, // Adds space above password input
   },
 });
