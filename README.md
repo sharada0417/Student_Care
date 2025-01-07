@@ -107,8 +107,40 @@ Once you have installed the necessary dependencies and set up the project, you c
   <img src="https://github.com/user-attachments/assets/6a888503-be73-4765-b099-6258d7bba284" width="300" height="500" />
   <img src="https://github.com/user-attachments/assets/d0951dfc-6295-47e7-b16a-105f802a814c" width="300" height="500" />
 
+
   
  <img src="https://github.com/user-attachments/assets/9b82b743-3a47-4dc0-8f33-de7373a60624" width="300" height="500" />
 
 
 
+  ## Project Structure  
+```
+.
+├── README.md
+├── App.js
+│── Components
+├        ├── Loginin.js
+├        ├── Home.js
+├        ├── Courses.js
+├        ├── profile.js
+├── assets
+├        ├── StudentDb.js
+├        ├── Profile %profile pictures here
+├        ├── logo.png
+└──index.js
+
+```
+
+## Contributing
+
+Contributions are always welcome! If you find any issues or want to improve the project, feel free to fork the repository and submit a pull request. Here’s how you can contribute:
+
+1. Fork the repository
+2. Create a new branch for your changes
+3. Make your changes and commit them
+4. Push to your forked repository
+5. Open a pull request to the main repository
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
