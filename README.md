@@ -15,7 +15,7 @@ To get started with this project, you'll need to clone the repository and instal
 1. Clone the repository:
     ```bash
     cd UOVStudentCare
-    git clone https://github.com/your-username/UOVStudentCare.git
+    https://github.com/sharada0417/UOVStudentCare.git
     ```
 
 2. Install the dependencies:
