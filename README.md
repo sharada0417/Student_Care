@@ -1,4 +1,4 @@
-# UOVStudentCare - IT3133(P) Assignment 3
+# Student_Care
 
 UOVStudentCare is a mobile application designed as part of the IT3133(P) course assignment. This app is built using React Native, Expo, and various supporting libraries, providing a platform for students to log in, view their courses, and manage subject information. The application includes multiple pages for the users, such as:
 
